@@ -150,7 +150,7 @@ void titleScreen() {
   dungeonPreview(); 
   startBtn.display();
 }
-
+// ethan made this screen
 void deathScreen() {
   fill(255);
   textAlign(CENTER, CENTER);
@@ -287,4 +287,5 @@ if (currentRoomIndex == -1 && rooms.size() > 0) currentRoomIndex = 0;
 void resetGame() {
   startGame();
 }
+
 
