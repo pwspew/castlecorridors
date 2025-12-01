@@ -34,6 +34,7 @@ class Enemy {
     float nx = x + vx;
     float ny = y + vy;
 
+// Ethan Shafran Made this
     if (!collidesWithMap(nx, ny, size)) {
       x = nx;
       y = ny;
@@ -53,4 +54,5 @@ class Enemy {
     ellipse(x, y, size, size);
   }
 }
+
 
