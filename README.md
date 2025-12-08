@@ -5,9 +5,9 @@ Potential Roguelike elements, platformer-esque(?)
 
 
 ## Roles:
-Oliver - Coding
+Oliver - Coding/ a little bit of everything/ and polisher of everything
 
-Ethan - Coding/Game Design
+Ethan - Coding/Game Design/Emotional Support
 
 Madeline - Coding/Graphics 
 
@@ -16,7 +16,7 @@ El - Graphics/Game Design
 ## Downloads:
 
 
-## Diagram (much more to be added)
+## Diagram (much more to be added) (aka VERY OUTDATED)
 ![classdiagram](https://github.com/pwspew/escalation7/blob/main/images/ethandia.png)
 
 ## GUI mockups:
