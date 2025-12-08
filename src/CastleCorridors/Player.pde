@@ -1,6 +1,4 @@
-//Madeline H made this class.
-// she made the HUD, movement, and collision and Ollie implemented the room index
-
+// Player.pde — revised (handles GIF play/pause when standing still)
 class Player {
   float x, y;
   int size = 10;
@@ -10,10 +8,41 @@ class Player {
   int score = 0;
   boolean left, right, up, down;
   int attackCooldown = 0;
+  int damage = 10;
+  float basespeed = 3.2;
 
-  Player(float x_, float y_) {
+  // GIFs
+  Gif servingL, servingR;
+  Gif serving;     // the main one , all other gifs will be funneled into this one
+  Gif idleLeft, idleRight;
+  String leftguy  = "ServantLeftWalking.gif";
+  String rightguy = "ServantRightWalking.gif";
+
+  // movement detection
+  float prevX, prevY;
+  float moveThreshold = 0.4; // small dead zone to avoid flickering (i hate flickering)
+  boolean facingLeft = false;
+
+  Player(PApplet parent, float x_, float y_) {
     x = x_;
     y = y_;
+
+
+    servingL = new Gif(parent, leftguy);
+    servingR = new Gif(parent, rightguy);
+    idleLeft = new Gif(parent, "ServantL.gif");
+    idleRight = new Gif(parent, "ServantR.gif");
+
+    servingL.loop();
+    servingR.loop();
+
+    // default to right-facing sprite but pause it (idle)
+    serving = idleLeft;
+    serving.pause();
+
+    // init previous position for movement detection
+    prevX = x;
+    prevY = y;
   }
 
   void reset(float nx, float ny) {
@@ -22,16 +51,52 @@ class Player {
     health = maxHealth;
     score = 0;
     left = right = up = down = false;
+    // reset animation state
+    serving = idleLeft;
+    serving.pause();
+    prevX = x;
+    prevY = y;
   }
 
   void update() {
+    // compute input direction
     float dx = 0;
     float dy = 0;
-    if (left) dx -= 1;
-    if (right) dx += 1;
-    if (up) dy -= 1;
-    if (down) dy += 1;
-    if (dx!=0 || dy!=0) {
+
+    if (left) {
+      dx -= 1;
+    }
+    if (right) {
+      dx += 1;
+    }
+    if (up) {
+      dy -= 1;
+    }
+    if (down) {
+      dy += 1;
+    }
+
+    // movement magnitude
+    boolean isMoving = (abs(dx) > 0 || abs(dy) > 0);
+
+
+    if (dx < 0) facingLeft = true;
+    else if (dx > 0) facingLeft = false;
+
+
+    Gif want = facingLeft ? servingL : servingR;
+
+    // if moving: normalize and try to move; also ensure walking animation plays
+    if (isMoving) {
+      // pick chosen sprite, play it, pause the other
+      if (serving != want) {
+        // switch to the correct sprite reference
+        serving.pause();    // pause previously shown (keeps its current frame)
+        serving = want;
+      }
+      serving.play(); // ensure the chosen sprite is playing
+
+      // movement physics (normalize so diagonal not faster)
       float len = dist(0, 0, dx, dy);
       dx /= len;
       dy /= len;
@@ -49,24 +114,45 @@ class Player {
           y = ny;
         }
       }
+    } else {
+     serving = idleRight;
+      serving.pause();
+      // optionally pause the other as well (not required but keeps both in same state)
+      if (serving == servingL) {
+        servingR.pause();
+      } else {
+        servingL.pause();
+      }
     }
+
     // update current room index after movement
     int idx = getRoomIndexAt(x, y);
     if (idx != -1 && idx != currentRoomIndex) {
       currentRoomIndex = idx;
-      // optional: trigger on-enter-room stuff
-      // println("Entered room " + currentRoomIndex);
+      println("Entered room " + currentRoomIndex);
     }
 
+    // keep inside world bounds (adjust if you want camera padding)
     x = constrain(x, size/2, width - size/2);
     y = constrain(y, size/2, height - size/2);
+
+    // cooldown
     if (attackCooldown > 0) attackCooldown--;
+
+    // save prev pos (optional — used if you want velocity-based checks later)
+    prevX = x;
+    prevY = y;
   }
 
   void display() {
     noStroke();
     fill(80, 200, 250);
-    ellipse(x, y, size, size);
+
+    // draw GIF centered on (x,y)
+    imageMode(CENTER);
+    image(serving, x, y, size*4, size*4);
+    imageMode(CORNER);
+
     if (attackCooldown > 0 && attackCooldown > 18) {
       fill(255, 150, 0, 80);
       ellipse(x, y, 80, 80);
@@ -75,9 +161,11 @@ class Player {
 
   void displayHUD() {
     fill(255);
-    textSize(16);
-    text("Health: " + health, 40, 28);
-    text("Score: " + score, 40, 48);
+    textSize(32);
+
+    text("pH level: " + health, 110, 28);
+    text("Points recieved: " + score, 135, 58);
+    text(survivalCounter/60, width/2, 58);
   }
 
   void attack() {
@@ -86,9 +174,12 @@ class Player {
       float range = 40;
       for (int i = enemies.size()-1; i >= 0; i--) {
         Enemy e = enemies.get(i);
-        if (dist(x, y, e.x, e.y) < range + e.size/2) {
+        if (dist(x, y, e.x, e.y) < range + e.size/2 && e.health <= damage) {
           e.isDead = true;
           score += 10;
+        } else if (e.health > damage && dist(x, y, e.x, e.y) < range + e.size/2) {
+          e.knockbackFrom(x, y, 6);
+          e.health -= damage;
         }
       }
       if (dist(x, y, king.x, king.y) < range + king.size/2) {
@@ -109,4 +200,3 @@ class Player {
     }
   }
 }
-

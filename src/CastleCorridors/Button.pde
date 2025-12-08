@@ -23,4 +23,3 @@ class Button {
     return mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h;
   }
 }
-

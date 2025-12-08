@@ -1,5 +1,7 @@
-// Ollie made this class thank you BSP and the very old game Rogue. I had to study for this to work man.
+// Ollie made this class thank you BSP and the very old game Rogue. 
 // https://en.wikipedia.org/wiki/Binary_space_partitioning
+// chatgpt also partook in this class thanks GPT 
+// this is really hard to wrap my head around
 class Leaf {
   int x, y, w, h;
   Leaf left, right;
@@ -11,13 +13,20 @@ class Leaf {
     h = h_;
   }
   boolean split(int minSize) {
-    if (left != null || right != null) return false; // already split
+    if (left != null || right != null) {
+      return false;
+    }
     boolean splitH = random(1) > 0.5;
-    if (w > h && w / h >= 1.25) splitH = false;
-    else if (h > w && h / w >= 1.25) splitH = true;
+    if (w > h && w / h >= 1.25) {
+      splitH = false;
+    } else if (h > w && h / w >= 1.25) {
+      splitH = true;
+    }
 
     int max = (splitH ? h : w) - minSize;
-    if (max <= minSize) return false;
+    if (max <= minSize) {
+      return false;
+    }
     int splitPos = int(random(minSize, max));
 
     if (splitH) {
@@ -35,7 +44,7 @@ class Leaf {
       if (left != null) left.createRooms(padding);
       if (right != null) right.createRooms(padding);
 
-      // if both children have rooms, optionally connect them later
+      // if both daughters have rooms, optionally connect them later
     } else {
       // make a room inside this leaf
       int rw = int(random(max(3, w/2), max(3, w - padding)));
@@ -48,11 +57,11 @@ class Leaf {
   }
 
   void collectLeaves(ArrayList<Leaf> tree) {
-    if (left == null && right == null) tree.add(this);
-    else {
+    if (left == null && right == null) {
+      tree.add(this);
+    } else {
       if (left != null) left.collectLeaves(tree);
       if (right != null) right.collectLeaves(tree);
     }
   }
 }
-

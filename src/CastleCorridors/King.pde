@@ -3,13 +3,16 @@
 // ollie and ethan polished it
 class King {
   float x, y;
-  float size = 48;
+  float size = 86;
   float speed = 1.6;
   float vx = 0, vy = 0;
-
-  King(float sx, float sy) {
+  PImage theking = loadImage("king.png");
+  Gif therealking;
+  King(PApplet parent, float sx, float sy) {
     x = sx;
     y = sy;
+    therealking = new Gif(parent, "kingtailwave.gif");
+    therealking.play();
   }
 
   void setPos(float sx, float sy) {
@@ -72,13 +75,12 @@ class King {
   void display() {
     noStroke();
     fill(220, 50, 50);
-    ellipse(x, y, size, size);
+    //ellipse(x, y, size, size);
     fill(255);
     textAlign(CENTER, CENTER);
     textSize(12);
     text("evil lion of doom", x, y - size/2 - 10);
+    imageMode(CENTER);
+    image(therealking, x, y, size, size);
   }
 }
-
-
-

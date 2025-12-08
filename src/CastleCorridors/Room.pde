@@ -97,14 +97,14 @@ void generateDungeon() {
     if (rooms.size()>0) {
       Room r = rooms.get(int(random(rooms.size())));
       PVector p = r.randomPoint();
-      enemies.add(new Enemy(p.x, p.y));
+      enemies.add(new Enemy(this, p.x, p.y));
     }
   }
   for (int i = 0; i < 3; i++) {
     if (rooms.size()>0) {
       Room r = rooms.get(int(random(rooms.size())));
       PVector p = r.randomPoint();
-      items.add(new Item(p.x, p.y));
+      items.add(new Item(this, p.x, p.y));
     }
   }
 }
@@ -174,4 +174,3 @@ void dungeonPreview() {
   drawDungeon();
   pop();
 }
-
