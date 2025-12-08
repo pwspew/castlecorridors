@@ -1,19 +1,21 @@
 # Castle Corridors
 
-A PC strategy game with psychadelic themes. Avoid angering the Tyrant King- and don't get banished! Navigate dialouge and find items to increase your chance of survival.
+A PC strategy game with psychadelic themes. Avoid angering the Tyrant King- and don't get banished! Find items to increase your chance of survival.
 Potential Roguelike elements, platformer-esque(?)
 
 
 ## Roles:
-Oliver - Coding (Infrastructure maker/physics constructor)
+Oliver - Coding
 
-Ethan - Coding/Game Design (diagram)
+Ethan - Coding/Game Design
 
-Madeline - Graphics (GUI Mockups)
+Madeline - Copding/Graphics 
 
-El - Graphics/Game Design (timeline)
+El - Graphics/Game Design 
 
 ## Downloads:
+
+
 ## Diagram (much more to be added)
 ![classdiagram](https://github.com/pwspew/escalation7/blob/main/images/ethandia.png)
 
