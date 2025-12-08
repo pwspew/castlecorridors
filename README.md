@@ -9,7 +9,7 @@ Oliver - Coding
 
 Ethan - Coding/Game Design
 
-Madeline - Copding/Graphics 
+Madeline - Coding/Graphics 
 
 El - Graphics/Game Design 
 
