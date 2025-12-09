@@ -1,8 +1,9 @@
-// ethan and ollie partook in this class 
+// ethan, ollie & el partook in this class
 // duo
-// noble and apostle 
+// noble and apostle
 // except apostle's very short
 // and noble is not as chunky
+
 class Enemy {
   float x, y;
   float size;
@@ -11,9 +12,11 @@ class Enemy {
   int health;
   int maxHealth;
 
+  //where he goin
   float tx, ty;            // wander target
   float prevX = 0;         // previous x for direction detection
 
+  //interactions
   int damage;              // melee damage
   float sightRange;        // how far they notice player
   float attackRange;       // distance to attack
@@ -21,13 +24,14 @@ class Enemy {
   int attackCooldown;
   int attackDelay;
 
+  // idk what to put here
   int etype;               // 0..3 variant
 
   // GIFs
   Gif beeLeft, beeRight;
   Gif bee;                 // current gif reference
 
-  
+  //what direction they are going in
   String leftFile  = "bee1left.gif";
   String rightFile = "bee1right.gif";
 
@@ -38,14 +42,13 @@ class Enemy {
     // pick a type 0..3 inclusive
     etype = int(random(0, 4));
 
-
     typeSpawn();
-
 
     pickTarget();
 
     prevX = x;
 
+    //direction.2
     beeLeft  = new Gif(parent, leftFile);
     beeRight = new Gif(parent, rightFile);
     beeLeft.loop();
@@ -59,21 +62,37 @@ class Enemy {
     // defaults
     size = 14;
     speed = 1.2;
-    maxHealth = 20;
+    maxHealth = 12;
     damage = 6;
     sightRange = 160;
     attackRange = 18;
     attackDelay = 40;
 
-    if (etype == 0) {         // basic
-      size = 20; speed = 1.2; maxHealth = 20; sightRange = 140; attackRange = 18;
+    if (etype == 0) {  // basic
+      size = 18;
+      speed = 1.2;
+      maxHealth = 10;
+      sightRange = 140;
+      attackRange = 18;
     } else if (etype == 1) {  // bigger
-      size = 30; speed = 0.8;  maxHealth = 40; sightRange = 120; attackRange = 20;
+      size = 22;
+      speed = 0.8;
+      maxHealth = 25;
+      sightRange = 120;
+      attackRange = 20;
     } else if (etype == 2) {  // faster
-      size = 16; speed = 2.4;  maxHealth = 12; sightRange = 100; attackRange = 10;
-    } else if (etype == 3) {  // thy boss !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
-    // foul tarnished, emboldened by the flame of ambition
-      size = 60; speed = 0.5;  maxHealth = 200; sightRange = 200; attackRange = 60;
+      size = 16;
+      speed = 2.4;
+      maxHealth = 6;
+      sightRange = 100;
+      attackRange = 10;
+    } else if (etype == 3) {  // thy boss !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      // foul tarnished, emboldened by the flame of ambition
+      size = 60;
+      speed = 0.5;
+      maxHealth = 200;
+      sightRange = 200;
+      attackRange = 60;
     }
     health = maxHealth;
   }
@@ -128,7 +147,7 @@ class Enemy {
       die();
     }
   }
- void knockbackFrom(float fromX, float fromY, float strength) {
+  void knockbackFrom(float fromX, float fromY, float strength) {
     float ang = atan2(y - fromY, x - fromX);
     float nx = x + cos(ang) * strength * 6;
     float ny = y + sin(ang) * strength * 6;
