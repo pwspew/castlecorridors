@@ -115,7 +115,7 @@ class Player {
         }
       }
     } else {
-     serving = idleRight;
+      serving = idleRight;
       serving.pause();
       // optionally pause the other as well (not required but keeps both in same state)
       if (serving == servingL) {
@@ -170,7 +170,7 @@ class Player {
 
   void attack() {
     if (attackCooldown == 0) {
-      attackCooldown = 30;
+      attackCooldown = 25;
       float range = 40;
       for (int i = enemies.size()-1; i >= 0; i--) {
         Enemy e = enemies.get(i);
