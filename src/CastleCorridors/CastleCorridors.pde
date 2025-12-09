@@ -1,39 +1,46 @@
-// Ollie G , Ellie Jacobsen , Ethan Shafran, Madeline Hendrickson
+// Ollie G, El J, Ethan S, Madeline H
 // power of friendship!!!!
-// the date right now is Nov 24
+// Dec 8
+
+//Images, gifs & fonts
 import gifAnimation.*;
+Gif death, kingstart2;
+PImage kingstart, win;
+PFont everytext;
+
+//Camera
 float camX = 0, camY = 0;
 int currentRoomIndex = -1;      //room finder
 boolean roomClampMode = false;   //false makes it not follow no more
 float cameraPadding = 200;
-PImage kingstart;
 float zoom = 4;
-PFont everytext;
-//the grid
+
+//Grid
 int tileSize = 10;
 int cols, rows;
 boolean[][] walkable; // true = floor false = wall
 
+//Screens
 int titlescreen = 0;
 int playscreen  = 1;
 int youdied  = 2;
 int youwin = 3;
 int state = titlescreen;
 
-// player
+//Player
 Player player;
 
-// king (hes evil)
+//King (hes evil)
 King king;
 
-// enemies and items
+//Enemies & items
 ArrayList<Enemy> enemies;
 ArrayList<Item> items;
 
-// bsp (thanks rogue for figuring it tree)
+//bsp (thanks rogue for figuring it tree)
 ArrayList<Room> rooms;
 
-// button and spawns
+//button & spawns
 Button startBtn, restartBtn, settingsBtn, menuBtn;
 int spawnTimer = 0;
 int spawnInterval = 50; // frames x 3
@@ -43,31 +50,45 @@ int survivalCounter = 0;
 
 
 void setup() {
+  pixelDensity(1);
+
   fullScreen();
   rectMode(CORNER);
   textAlign(CENTER, CENTER);
+  frameRate(60);
+
+  //grid
   cols = width / tileSize;
   rows = height / tileSize;
   walkable = new boolean[cols][rows];
+
+  //images, gifs & fonts
+  win = loadImage("YouWing.png");
   kingstart = loadImage("king.png");
   everytext = createFont("AlteHaasGroteskBold.ttf", 32);
   Gif bee = new Gif(this, "bee1left.gif");
+  Gif death = new Gif(this, "YOU WERE BANISHED.gif");
   bee.play();
   textFont(everytext, 50);
+
+  //Calling
   player = new Player(this, width/2, height/2);
   king = new King(this, 60, 60);
+
+  //arrays
   enemies = new ArrayList<Enemy>();
   items = new ArrayList<Item>();
   rooms = new ArrayList<Room>();
 
+  //Buttons
   startBtn = new Button("start", width/2 - 120, height/2 + 60, 240, 50);
   restartBtn = new Button("run it once more", width/2 - 120, height/2 + 80, 240, 50);
-  frameRate(60);
 
-  // generates before anything very important
+  //Generates before anything very important
   generateDungeon();
 }
 
+//Room shenanigans (ask Ollie)
 int getRoomIndexAt(float px, float py) {
   float pad = tileSize * 0.9;
   for (int i = 0; i < rooms.size(); i++) {
@@ -100,7 +121,7 @@ boolean collidesWithMap(float cx, float cy, float sizePX) {
 }
 
 void draw() {
-  background(0, 10, 0);
+  background(0);
   if (state == titlescreen) {
     titleScreen();
   } else if (state == playscreen) {
@@ -152,40 +173,54 @@ void updateCamera() {
   }
 }
 
-
+//El edited
 void titleScreen() {
   fill(255);
   imageMode(CENTER);
   image(kingstart, width/2, height/2 - 300, 420, 420);
+
   textAlign(CENTER, CENTER);
   textSize(64);
   text("Castle Corridors", width/2, height/2 - 80);
+
   textSize(18);
-  text("its either be in this dungeon or get attacked by 10,000 bees", width/2, height/2 - 30);
+  text("get in the dungeon or get attacked by 10,000 bees", width/2, height/2 - 30);
+
   textSize(22);
-    text("survive for 60 seconds !!!!!!! ", width/2, height/2 + 10);
+  text("Survive for 60 seconds !!!!!!! ", width/2, height/2 + 10);
+
   dungeonPreview();
   startBtn.display();
 }
+
 // ethan made this screen
+// El edited
 void deathScreen() {
   fill(255);
-  textAlign(CENTER, CENTER);
-  textSize(48);
-  text("you lost", width/2, height/2 - 40);
-  textSize(20);
+  imageMode(CENTER);
+  image(death, width/2, height/2);
+  death.play();
+  noLoop();
 
+  textAlign(CENTER, CENTER);
   textSize(20);
   text("Score: " + player.score + "    Health: " + player.health, width/2, height/2+30);
   restartBtn.display();
 }
 
+//El edited
 void youwinScreen() {
   fill(60, 120, 120);
+  imageMode(CENTER);
+  image(win, width/2, height/2);
+
   textAlign(CENTER, CENTER);
   textSize(48);
-  text("you win!!!!", width/2, height/2 - 40);
+  text("You Win!!!!", width/2, height/2 - 40);
+
   textSize(20);
+  text("the bees didn't get you", width/2, height/2 - 80);
+
 
   textSize(20);
   text("Score: " + player.score + "    Health: " + player.health, width/2, height/2+30);
@@ -206,12 +241,10 @@ void itemEffect(Item it) {
     //player.damage += 10;
   }
 }
+
+// el edited
 void runGame() {
-  // update
-
-
-
-
+  //update
   player.update();
   updateCamera();
   //king.updateTowards(player.x, player.y);
@@ -224,7 +257,7 @@ void runGame() {
       enemies.remove(i);
       continue;
     }
-    if (enemies.size() >10) {
+    if (enemies.size() >8) {
       enemies.remove(1);
     }
     if (dist(e.x, e.y, player.x, player.y) < (e.size/2 + player.size/2)) {
@@ -233,7 +266,10 @@ void runGame() {
   }
   for (int i = items.size()-1; i >= 0; i--) {
     Item it = items.get(i);
-
+    
+    if(items.size() >8) {
+      items.remove(1);
+    }
 
     if (dist(it.x, it.y, player.x, player.y) < (it.size/2 + player.size/2)) {
 
@@ -245,6 +281,7 @@ void runGame() {
       itemEffect(it);
     }
   }
+
   itemTimer --;
   if (itemTimer <= 0) {
     player.speed = player.basespeed;
@@ -348,13 +385,9 @@ void mousePressed() {
     }
   } else if (state == youdied || state == youwin) {
     if (restartBtn.clicked()) {
-    
-      resetGame();
-     
-      
-    }
 
-    
+      resetGame();
+    }
   }
 }
 
